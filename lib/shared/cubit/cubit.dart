@@ -26,18 +26,19 @@ class NewsAppCubit extends Cubit<NewsAppStates> {
 
   List<dynamic> articles = [];
   void getNews() {
+    emit(GetNewsLoadingState());
     DioHelper.getData(
           url: 'v2/everything',
           queryParameters: {
             'q': 'Apple',
-            'from': '2025-09-29',
+            'from': '2025-09-20',
             'sortBy': 'popularity ',
             'apiKey': '07e3a12be91444afa9d312fd04a426a6',
           },
         )
         .then((value) {
           articles = value.data['articles'];
-          print('${articles[0]['title']}');
+
           emit(GetNewsSuccesState());
         })
         .catchError((err) {

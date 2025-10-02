@@ -7,3 +7,5 @@ class ChangeBottNavBar extends NewsAppStates {}
 class GetNewsSuccesState extends NewsAppStates {}
 
 class GetNewsErrorState extends NewsAppStates {}
+
+class GetNewsLoadingState extends NewsAppStates {}
