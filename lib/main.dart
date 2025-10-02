@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:news_app/layout/home_layout.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         appBarTheme: AppBarTheme(
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -42,6 +44,33 @@ class MyApp extends StatelessWidget {
 
         scaffoldBackgroundColor: Colors.white,
       ),
+      darkTheme: ThemeData(
+        scaffoldBackgroundColor: HexColor('333739'),
+        appBarTheme: AppBarTheme(
+          elevation: 0.0,
+          backgroundColor: HexColor('333739'),
+          titleTextStyle: TextStyle(
+            fontSize: 25.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.deepOrange,
+          ),
+          iconTheme: IconThemeData(color: Colors.white, size: 30.0),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: HexColor('333739'),
+          elevation: 20.0,
+          selectedIconTheme: IconThemeData(color: Colors.deepOrange),
+          selectedItemColor: Colors.deepOrange,
+          unselectedLabelStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+          selectedLabelStyle: TextStyle(
+            fontSize: 17.0,
+            fontWeight: FontWeight.bold,
+          ),
+          unselectedItemColor: Colors.grey,
+        ),
+      ),
+      themeMode: ThemeMode.dark,
       home: HomeLayout(),
     );
   }
