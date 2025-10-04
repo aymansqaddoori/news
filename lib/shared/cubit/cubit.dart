@@ -27,6 +27,7 @@ class NewsAppCubit extends Cubit<NewsAppStates> {
   List<dynamic> articles = [];
   void getNews() {
     emit(GetNewsLoadingState());
+    articles = [];
     DioHelper.getData(
           url: 'v2/everything',
           queryParameters: {
@@ -45,5 +46,12 @@ class NewsAppCubit extends Cubit<NewsAppStates> {
           SnackBar(content: Text(err));
           emit(GetNewsErrorState());
         });
+  }
+  //dark and light toggle
+
+  bool isDark = false;
+  void changThemeMode() {
+    isDark = !isDark;
+    emit(ChangThemeModeState());
   }
 }
