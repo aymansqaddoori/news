@@ -4,22 +4,28 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:news_app/layout/home_layout.dart';
 import 'package:news_app/shared/cubit/cubit.dart';
 import 'package:news_app/shared/cubit/states.dart';
+import 'package:news_app/shared/network/local/cache_helper.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DioHelper.init();
-  runApp(const MyApp());
+  await CacheHelper.init();
+  bool? isDark = CacheHelper.getData(key: 'isDark');
+  runApp(MyApp(isDark: isDark));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool? isDark;
+  const MyApp({super.key, required this.isDark});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewsAppCubit()..getNews(),
+      create: (context) => NewsAppCubit()
+        ..getNews()
+        ..changThemeMode(fromShared: isDark),
       child: BlocConsumer<NewsAppCubit, NewsAppStates>(
         listener: (context, state) {},
         builder: (context, state) {

@@ -5,6 +5,7 @@ import 'package:news_app/modules/science_screen/science.dart';
 import 'package:news_app/modules/setting_screen/setting.dart';
 import 'package:news_app/modules/sports_screen/sport.dart';
 import 'package:news_app/shared/cubit/states.dart';
+import 'package:news_app/shared/network/local/cache_helper.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
 
 class NewsAppCubit extends Cubit<NewsAppStates> {
@@ -20,6 +21,10 @@ class NewsAppCubit extends Cubit<NewsAppStates> {
 
   List<Widget> screens = [Business(), Sport(), Science(), Setting()];
   void changeBottNavBar({required int index}) {
+    if (currentIndex == 0 && articles.isNotEmpty) {
+      getNews();
+      emit(GetNewsSuccesState());
+    }
     currentIndex = index;
     emit(ChangeBottNavBar());
   }
@@ -27,12 +32,12 @@ class NewsAppCubit extends Cubit<NewsAppStates> {
   List<dynamic> articles = [];
   void getNews() {
     emit(GetNewsLoadingState());
-    articles = [];
+
     DioHelper.getData(
           url: 'v2/everything',
           queryParameters: {
             'q': 'Apple',
-            'from': '2025-09-20',
+            'from': '2025-10-1',
             'sortBy': 'popularity ',
             'apiKey': '07e3a12be91444afa9d312fd04a426a6',
           },
@@ -43,15 +48,22 @@ class NewsAppCubit extends Cubit<NewsAppStates> {
           emit(GetNewsSuccesState());
         })
         .catchError((err) {
-          SnackBar(content: Text(err));
+          SnackBar(content: Text(err.toString()));
           emit(GetNewsErrorState());
         });
   }
   //dark and light toggle
 
   bool isDark = false;
-  void changThemeMode() {
-    isDark = !isDark;
-    emit(ChangThemeModeState());
+  void changThemeMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+      emit(ChangThemeModeState());
+    } else {
+      isDark = !isDark;
+      CacheHelper.putData(key: 'isDark', value: isDark).then((val) {
+        emit(ChangThemeModeState());
+      });
+    }
   }
 }

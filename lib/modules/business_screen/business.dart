@@ -10,21 +10,24 @@ class Business extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var articles = NewsAppCubit.get(context).articles;
     return BlocConsumer<NewsAppCubit, NewsAppStates>(
-      builder: (context, state) => ConditionalBuilder(
-        condition: true,
-        builder: (context) => ListView.separated(
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) => newsCard(articles: articles[index]),
-          separatorBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Container(height: 1.0, color: Colors.grey),
+      builder: (context, state) {
+        var articles = NewsAppCubit.get(context).articles;
+        return ConditionalBuilder(
+          condition: true, // articles.isNotEmpty,
+          builder: (context) => ListView.separated(
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (context, index) =>
+                newsCard(articles: articles[index]),
+            separatorBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(height: 1.0, color: Colors.grey),
+            ),
+            itemCount: articles.length,
           ),
-          itemCount: articles.length,
-        ),
-        fallback: (context) => Center(child: CircularProgressIndicator()),
-      ),
+          fallback: (context) => Center(child: CircularProgressIndicator()),
+        );
+      },
       listener: (context, state) {},
     );
   }
